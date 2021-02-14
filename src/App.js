@@ -8,8 +8,10 @@ function App() {
   const [ minimum, setMinimum ] = useState(1000);
   const [ cloutedViewers, setCloutedViewers ] = useState([]);
 
+  const API = 'https://twitch-clouted.herokuapp.com/';
+
   const handleSearch = () => {
-    const endpoint = `${channelName}?minimum=${minimum}`
+    const endpoint = `${API}${channelName}?minimum=${minimum}`
     axios({
       method: 'get',
       url: endpoint,
