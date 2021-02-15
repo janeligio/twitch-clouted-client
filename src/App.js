@@ -7,17 +7,20 @@ function App() {
   const [ channelName, setChannelName ] = useState('');
   const [ minimum, setMinimum ] = useState(1000);
   const [ cloutedViewers, setCloutedViewers ] = useState([]);
+  const [ isLoading, setLoading ] = useState(false);
 
   const API = 'https://twitch-clouted.herokuapp.com/';
 
   const handleSearch = () => {
     const endpoint = `${API}${channelName}?minimum=${minimum}`
+    setLoading(true);
     axios({
       method: 'get',
       url: endpoint,
       headers: {'Access-Control-Allow-Origin': '*'}
     }).then(response => {
       setCloutedViewers([..._.orderBy(response.data, ['followers'], ['desc'])]);
+      setLoading(false);
     }).catch(err => console.log(err));
   };
 
@@ -25,23 +28,32 @@ function App() {
     <div style={{backgroundColor: colors.purple}} className="App">
       <header style={{margin:0, display:'flex', justifyContent:'center'}} className="App-header">
         <h1 style={{color: colors.white, margin:0, padding:'0.5em'}}>
-          Clouted Viewers
+          Twitch Clouted
         </h1>
       </header>
-      <section>
-        <h3 style={{padding: '1em', color: colors.white}}>Enter Channel Name:
-          <input type="text" id="channel-name" value={channelName} 
+      <section style={{display:'flex', justifyContent:'center'}}>
+          <label style={{color: colors.white, margin:'0 1em'}}>Channel Name:</label>
+          <input type="text" id="channel-name" name="Channel Name" value={channelName} 
             onChange={event => setChannelName(event.target.value)}/>
-          <input type="text" id="minimum" value={minimum}
-            onChange={event => setMinimum(event.target.value)}/>
-          <button onClick={handleSearch}>Get Clouted viewers!</button>
-        </h3>
-
+          <label style={{color: colors.white, margin:'0 1em'}}>Minimum Followers: </label>
+            <input type="text" id="minimum" value={minimum}
+              onChange={event => setMinimum(event.target.value)}/>
       </section>
+      <div style={{display:'flex', justifyContent:'center', marginTop:'1em'}}>
+        <button id="submit-button" style={{ boxShadow: '0 3px 5px rgba(0, 0, 0, 0.18)', fontSize:'1em', fontWeight: 'bold', padding:'0.5em 1em',  color:colors.white, border:'none', borderRadius:5}} onClick={handleSearch}>Get Clouted Viewers</button>
+      </div>
       <main>
-        <div style={{display:'flex', flexWrap: 'wrap', padding:'1em'}}>
-          { cloutedViewers.map((val) => <CloutedViewer key={val._id} data={val}/>) }
-        </div>
+          {
+            cloutedViewers.length > 0 ? <h4 style={{color:colors.white, textAlign:'left', paddingLeft:'2em', margin:0}}>{cloutedViewers.length} Clouted Viewers</h4> : null
+          }
+          <div style={{display:'flex', justifyContent:'center', flexWrap: 'wrap', padding:'1em'}}>
+          {
+           isLoading 
+            ? <img style={{display:'block'}} src="https://i.pinimg.com/originals/3f/2c/97/3f2c979b214d06e9caab8ba8326864f3.gif" alt="loader"/>
+            : <>{ cloutedViewers.map((val) => <CloutedViewer key={val._id} data={val}/>) }</>
+          }
+          </div>
+        
       </main>
     </div>
   );
@@ -62,7 +74,7 @@ function CloutedViewer(props) {
     </div>
 
     <div style={{padding:20, paddingTop:0}}>
-      <a href={url} target="_blank" rel="noopener noreferrer">
+      <a style={{textDecoration:'none'}} href={url} target="_blank" rel="noopener noreferrer">
         <h4 style={{color:colors.white}}>{display_name} {partner ? VerifiedSVG : null}</h4>
       </a>
       <p style={{color:colors.white}}>{followers} followers</p>

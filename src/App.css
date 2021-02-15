@@ -1,0 +1,8 @@
+#submit-button {
+    background-color: #392e5c;
+}
+
+#submit-button:hover {
+    background-color: #6441a4;
+    cursor: pointer;
+}
