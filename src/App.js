@@ -31,20 +31,21 @@ function App() {
           Twitch Clouted
         </h1>
       </header>
-      <section style={{display:'flex', justifyContent:'center'}}>
-          <label style={{color: colors.white, margin:'0 1em'}}>Channel Name:</label>
-          <input type="text" id="channel-name" name="Channel Name" value={channelName} 
+      <section style={{display:'flex', justifyContent:'center', flexWrap:'wrap'}}>
+          <label style={{color: colors.white, margin:'0 1em'}}>Enter a live twitch channel to see some clouted viewers: </label>
+          <input type="text" id="channel-name" name="Channel Name" value={channelName} placeholder="Example: tfue"
             onChange={event => setChannelName(event.target.value)}/>
-          <label style={{color: colors.white, margin:'0 1em'}}>Minimum Followers: </label>
+          <label style={{color: colors.white, margin:'0 1em'}}>with at least</label>
             <input type="text" id="minimum" value={minimum}
               onChange={event => setMinimum(event.target.value)}/>
+          <label style={{color: colors.white, margin:'0 1em'}}>followers.</label>
       </section>
       <div style={{display:'flex', justifyContent:'center', marginTop:'1em'}}>
         <button id="submit-button" style={{ boxShadow: '0 3px 5px rgba(0, 0, 0, 0.18)', fontSize:'1em', fontWeight: 'bold', padding:'0.5em 1em',  color:colors.white, border:'none', borderRadius:5}} onClick={handleSearch}>Get Clouted Viewers</button>
       </div>
-      <main>
+      <main style={{boxShadow: '0 3px 5px rgba(0, 0, 0, 0.18)', margin: '10px auto', minHeight: 300, maxWidth:700, background:colors.darkPurple, borderRadius: 20}}>
           {
-            cloutedViewers.length > 0 ? <h4 style={{color:colors.white, textAlign:'left', paddingLeft:'2em', margin:0}}>{cloutedViewers.length} Clouted Viewers</h4> : null
+            cloutedViewers.length > 0 ? <h4 style={{color:colors.white, textAlign:'left', paddingLeft:'2em', padding:'1em 0 0 1em'}}>{cloutedViewers.length} Clouted Viewers</h4> : null
           }
           <div style={{display:'flex', justifyContent:'center', flexWrap: 'wrap', padding:'1em'}}>
           {
@@ -65,7 +66,7 @@ function CloutedViewer(props) {
   
   const bannerStyle = profile_banner ? `url(${profile_banner})` : colors.black;
   
-  return (<div style={{flex:1, maxWidth: 300, minWidth: 200, maxHeight: 300, backgroundColor: colors.darkPurple, margin:'5px', borderRadius:10}}>
+  return (<div style={{flex:1, maxWidth: 300, minWidth: 200, maxHeight: 300, margin:'5px', borderRadius:10, background: colors.lightPurple, boxShadow: '0 3px 5px rgba(0, 0, 0, 0.18)'}}>
     <div style={{padding:5, background: bannerStyle, backgroundSize: 'cover', borderRadius: '10px 10px 0 0', display:'flex', justifyContent:'center'}}>
       <a href={url} target="_blank" rel="noopener noreferrer">
         {/* <img style={{maxHeight: 100, borderRadius:'50%', display:'block', margin:'auto'}} src={logo} alt="name"/> */}
@@ -100,6 +101,7 @@ function shortenDesc(desc) {
 const colors = {
   black: '#000000',
   purple: '#6441a4',
+  lightPurple: '#674b9b',
   darkPurple: '#392e5c',
   white: '#ffffff'
 }
